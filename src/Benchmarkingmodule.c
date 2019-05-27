@@ -498,6 +498,143 @@ MARS_88_run(MARS_88 *self, PyObject *args, PyObject *kwds)
 	return res;
 }
 
+PyDoc_STRVAR(MARS_88_open__doc__,
+"open(warriors, seed) -> List\n\n"\
+"open a two warrior fight.\n\n"\
+"Keyword Arguments:\n\n"\
+"warriors -- list of two warriors\n"\
+"seed     -- position of the second warrior in the first fight\n"\
+"            (default: a random value)\n\n"\
+"returns 0 if opened\n");
+
+static PyObject *
+MARS_88_open(MARS_88 *self, PyObject *args, PyObject *kwds)
+{
+	PyObject *warriors;
+	s32_t seed;
+	u32_t result;
+	PyObject *res;
+
+	warrior_t *wlist;
+
+	/* Get and check arguments. */
+	static char *kwlist[] = {"warriors", "seed", NULL};
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "O|i", kwlist,
+					 &warriors, &seed)) {
+		return NULL;
+	}
+	if (PySequence_Check(warriors) == 0) {
+		PyErr_SetString(PyExc_ValueError, "List of warriors needed.");
+		return NULL;
+	}
+	if (PySequence_Size(warriors) != 2) {
+		PyErr_SetString(PyExc_ValueError,
+				"Exactly two warriors are needed "\
+				"to run a fight.");
+		return NULL;
+	}
+	if (seed < 0) {
+		PyErr_SetString(PyExc_ValueError, "Invalid seed.");
+		return NULL;
+	}
+	if (seed < self->mindistance) {
+		PyErr_SetString(PyExc_ValueError, "Position of second "\
+				"warrior cannot be smaller than minimal "\
+				"warrior distance.");
+		return NULL;
+	}
+
+	/* Try to convert warriors into internal format. */
+	wlist = get_warriors88(warriors, 2, self->maxlength);
+	if (wlist == NULL) {
+		PyErr_SetString(PyExc_ValueError, "Couldn't load warriors.");
+		return NULL;
+	}
+	Py_DECREF(warriors);
+
+	/* Run all fights. */
+	result = open_88(self->core, wlist, self->coresize, self->maxprocesses,
+		        self->mindistance, seed);
+	
+	free_warriors(wlist, 2);
+
+	if (result!=0) {
+		PyErr_SetString(PyExc_ValueError, "open failed");
+		return NULL;
+	}
+
+	/* Build results. */
+	res = Py_BuildValue("l", result);
+	// Py_INCREF(res);
+	return res;
+}
+
+PyDoc_STRVAR(MARS_88_step__doc__,
+"step() -> Int\n\n"\
+"run a simulation step\n\n"\
+"returns -1 if warrior1 wins, -2 if warrior2 wins, or current #warriors\n");
+
+static PyObject *
+MARS_88_step(MARS_88 *self, PyObject *args, PyObject *kwds)
+{
+	u32_t result;
+	PyObject *res;
+
+	result = step_88();
+
+	res = Py_BuildValue("l", result);
+	// Py_INCREF(res);
+		
+	return res;
+}
+
+PyDoc_STRVAR(MARS_88_stop__doc__,
+"stop() -> Int\n\n"\
+"stop the simulation\n\n"\
+"returns 0 on success\n");
+
+static PyObject *
+MARS_88_stop(MARS_88 *self, PyObject *args, PyObject *kwds)
+{
+	u32_t result;
+	PyObject *res;
+
+	result = stop_88();
+
+	res = Py_BuildValue("l", result);
+	// Py_INCREF(res);
+		
+	return res;
+}
+
+PyDoc_STRVAR(MARS_88_dumpcore__doc__,
+"dumpcore() -> List\n\n"\
+"do core dump.\n\n"\
+"the core is returned as a list of instructions\n"\
+"[(op, amode, afield, bmode, bfield)].\n");
+
+static PyObject *
+MARS_88_dumpcore(MARS_88 *self, PyObject *args, PyObject *kwds)
+{
+
+	PyObject *res = PyList_New(self->coresize);
+
+	insn_t *cur = self->core;
+	// insn_t *cend = self->core + self->coresize;
+
+	for(int i=0;i<self->coresize;++i) {
+		u32_t insn = cur[i].insn;
+		field_t af = cur[i].a;
+		field_t bf = cur[i].b;
+		PyObject *instr = Py_BuildValue("(l,l,l)", insn, af, bf);
+		PyList_SET_ITEM(res,i,instr);
+	}
+
+	// Py_INCREF(res);
+		
+	return res;
+}
+
 PyDoc_STRVAR(MARS_88_p_run__doc__,
 "p_run(warriors) -> List\n\n"\
 "Run a two warrior fight with all possible start positions.\n\n"\
@@ -674,6 +811,14 @@ static PyMemberDef MARS_88_members[] = {
 static PyMethodDef MARS_88_methods[] = {
 	{"run", (PyCFunction)MARS_88_run, METH_VARARGS | METH_KEYWORDS,
 	 MARS_88_run__doc__},
+	{"open", (PyCFunction)MARS_88_open, METH_VARARGS | METH_KEYWORDS,
+	 MARS_88_open__doc__},
+	{"step", (PyCFunction)MARS_88_step, METH_VARARGS | METH_KEYWORDS,
+	 MARS_88_step__doc__},
+	{"stop", (PyCFunction)MARS_88_stop, METH_VARARGS | METH_KEYWORDS,
+	 MARS_88_stop__doc__},
+	{"dumpcore", (PyCFunction)MARS_88_dumpcore, METH_VARARGS | METH_KEYWORDS,
+	 MARS_88_dumpcore__doc__},
 	{"p_run", (PyCFunction)MARS_88_p_run, METH_VARARGS | METH_KEYWORDS,
 	 MARS_88_p_run__doc__},
 	{"mw_run", (PyCFunction)MARS_88_mw_run, METH_VARARGS | METH_KEYWORDS,

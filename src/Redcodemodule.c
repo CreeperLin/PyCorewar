@@ -119,7 +119,7 @@ Instruction88_GetOpcode(Instruction88 *self, void *closure)
 	if (opcode == NULL) {
 		return NULL;
 	}
-	Py_INCREF(opcode);
+	// Py_INCREF(opcode);
 
 	return opcode;
 }
@@ -169,7 +169,7 @@ Instruction88_GetAMode(Instruction88 *self, void *closure)
 	if (amode == NULL) {
 		return NULL;
 	}
-	Py_INCREF(amode);
+	// Py_INCREF(amode);
 
 	return amode;
 }
@@ -219,7 +219,7 @@ Instruction88_GetBMode(Instruction88 *self, void *closure)
 	if (bmode == NULL) {
 		return NULL;
 	}
-	Py_INCREF(bmode);
+	// Py_INCREF(bmode);
 
 	return bmode;
 }
@@ -270,7 +270,7 @@ Instruction88_GetAField(Instruction88 *self, void *closure)
 	if (afield == NULL) {
 		return NULL;
 	}
-	Py_INCREF(afield);
+	// Py_INCREF(afield);
 
 	return afield;
 }
@@ -319,7 +319,7 @@ Instruction88_GetBField(Instruction88 *self, void *closure)
 	if (bfield == NULL) {
 		return NULL;
 	}
-	Py_INCREF(bfield);
+	// Py_INCREF(bfield);
 
 	return bfield;
 }
@@ -364,13 +364,13 @@ Instruction88_richcompare(Instruction88 *obj1, Instruction88 *obj2, int op)
 
 	if (op == Py_EQ) {
 		result = isEqual ? Py_True : Py_False;
-		Py_INCREF(result);
+		// Py_INCREF(result);
 		return result;
 	}
 
 	if (op == Py_NE) {
 		result = isEqual ? Py_False : Py_True;
-		Py_INCREF(result);
+		// Py_INCREF(result);
 		return result;
 	}
 
@@ -454,7 +454,7 @@ Instruction88_reinit(Instruction88 *self)
 	self->insn.a = 0;
 	self->insn.b = 0;
 
-	Py_INCREF(Py_None);
+	// Py_INCREF(Py_None);
 	return Py_None;
 }
 
@@ -584,7 +584,7 @@ Instruction_GetOpcode(Instruction *self, void *closure)
 	if (opcode == NULL) {
 		return NULL;
 	}
-	Py_INCREF(opcode);
+	// Py_INCREF(opcode);
 
 	return opcode;
 }
@@ -630,7 +630,7 @@ Instruction_GetModifier(Instruction *self, void *closure)
 	if (modifier == NULL) {
 		return NULL;
 	}
-	Py_INCREF(modifier);
+	// Py_INCREF(modifier);
 
 	return modifier;
 }
@@ -676,7 +676,7 @@ Instruction_GetAMode(Instruction88 *self, void *closure)
 	if (amode == NULL) {
 		return NULL;
 	}
-	Py_INCREF(amode);
+	// Py_INCREF(amode);
 
 	return amode;
 }
@@ -722,7 +722,7 @@ Instruction_GetBMode(Instruction *self, void *closure)
 	if (bmode == NULL) {
 		return NULL;
 	}
-	Py_INCREF(bmode);
+	// Py_INCREF(bmode);
 
 	return bmode;
 }
@@ -769,7 +769,7 @@ Instruction_GetAField(Instruction *self, void *closure)
 	if (afield == NULL) {
 		return NULL;
 	}
-	Py_INCREF(afield);
+	// Py_INCREF(afield);
 
 	return afield;
 }
@@ -814,7 +814,7 @@ Instruction_GetBField(Instruction *self, void *closure)
 	if (bfield == NULL) {
 		return NULL;
 	}
-	Py_INCREF(bfield);
+	// Py_INCREF(bfield);
 
 	return bfield;
 }
@@ -859,13 +859,13 @@ Instruction_richcompare(Instruction *obj1, Instruction *obj2, int op)
 
 	if (op == Py_EQ) {
 		result = isEqual ? Py_True : Py_False;
-		Py_INCREF(result);
+		// Py_INCREF(result);
 		return result;
 	}
 
 	if (op == Py_NE) {
 		result = isEqual ? Py_False : Py_True;
-		Py_INCREF(result);
+		// Py_INCREF(result);
 		return result;
 	}
 
@@ -951,7 +951,7 @@ Instruction_reinit(Instruction88 *self)
 	self->insn.a = 0;
 	self->insn.b = 0;
 
-	Py_INCREF(Py_None);
+	// Py_INCREF(Py_None);
 	return Py_None;
 }
 

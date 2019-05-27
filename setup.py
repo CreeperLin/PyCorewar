@@ -43,8 +43,8 @@ CLASSIFIERS = ['Development Status :: 3 - Alpha',
 PLATFORMS = 'Python 2.6 and later.'
 
 # FIXME: extra compiler arguments
-# EXTRA_COMPILE_ARGS = ['-O6', '-funroll-all-loops']
-EXTRA_COMPILE_ARGS = []
+EXTRA_COMPILE_ARGS = ['-O6', '-funroll-all-loops']
+# EXTRA_COMPILE_ARGS = []
 
 # Check Python version
 if sys.version_info < (2, 6):

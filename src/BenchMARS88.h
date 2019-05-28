@@ -20,8 +20,8 @@
 #ifndef COREWAR_BENCHMARKING_MARS88__H
 #define COREWAR_BENCHMARKING_MARS88__H
 
-u32_t step_88();
-u32_t stop_88();
+u32_t step_88(void);
+u32_t stop_88(void);
 u32_t open_88(
 	insn_t *_core, warrior_t *warriors, u32_t core_size, u32_t _maxprocesses,
     	u32_t mindistance, u32_t seed);

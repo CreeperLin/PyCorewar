@@ -627,7 +627,7 @@ MARS_88_dumpcore(MARS_88 *self, PyObject *args, PyObject *kwds)
 		field_t af = cur[i].a;
 		field_t bf = cur[i].b;
 		PyObject *instr = Py_BuildValue("(l,l,l)", insn, af, bf);
-		PyList_SET_ITEM(res,i,instr);
+		PyList_SetItem(res,i,instr);
 	}
 
 	// Py_INCREF(res);

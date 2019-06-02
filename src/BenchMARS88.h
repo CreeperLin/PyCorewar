@@ -20,6 +20,7 @@
 #ifndef COREWAR_BENCHMARKING_MARS88__H
 #define COREWAR_BENCHMARKING_MARS88__H
 
+s32_t* dump_proc_88(void);
 u32_t step_88(void);
 u32_t stop_88(void);
 u32_t open_88(

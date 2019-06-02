@@ -40,6 +40,27 @@ insn_t *core;
 u32_t coresize;
 u32_t maxprocesses;
 
+s32_t* dump_proc_88() {
+	insn_t** head = pqueue_info1.head;
+	u32_t numproc = pqueue_info1.numprocesses;
+	s32_t* results = calloc(maxprocesses * 2, sizeof(s32_t));
+	if (results == NULL) return NULL;
+	memset(results, -1, maxprocesses * 2 * sizeof(u32_t));
+	for (int i=0; i<numproc; ++i) {
+		results[i] = (*head - core);
+		++head;
+		if (head == pqueue_end) head = pqueue;
+	}
+	head = pqueue_info2.head;
+	numproc = pqueue_info2.numprocesses;
+	for (int i=0; i<numproc; ++i) {
+		results[i+maxprocesses] = (*head - core);
+		++head;
+		if (head == pqueue_end) head = pqueue;
+	}
+	return results;
+}
+
 u32_t step_88() {
 
 	insn_t *ip;    /* Pointer to the currently executed

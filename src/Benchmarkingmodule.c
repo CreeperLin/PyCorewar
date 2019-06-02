@@ -25,6 +25,7 @@
 #include <BenchWarrior.h>
 #include <BenchMARS88.h>
 #include <BenchMARS94nop.h>
+#include <BenchProcessQueue.h>
 
 #if PY_MAJOR_VERSION >= 3
     #define check_py3long_or_py2int PyLong_Check
@@ -635,6 +636,29 @@ MARS_88_dumpcore(MARS_88 *self, PyObject *args, PyObject *kwds)
 	return res;
 }
 
+PyDoc_STRVAR(MARS_88_dumpproc__doc__,
+"dumpproc() -> List\n\n"\
+"do process dump.\n\n"\
+"the process queue is returned as a list of indices\n"\
+"[[idx1],[idx2]].\n");
+
+static PyObject *
+MARS_88_dumpproc(MARS_88 *self, PyObject *args, PyObject *kwds)
+{
+
+	PyObject *res = PyList_New(self->maxprocesses * 2);
+
+	s32_t* result = dump_proc_88();
+	for(int i=0;i<self->maxprocesses * 2;++i) {
+		PyObject *instr = PyLong_FromLong(result[i]);
+		PyList_SetItem(res,i,instr);
+	}
+
+	free(result);
+		
+	return res;
+}
+
 PyDoc_STRVAR(MARS_88_p_run__doc__,
 "p_run(warriors) -> List\n\n"\
 "Run a two warrior fight with all possible start positions.\n\n"\
@@ -819,6 +843,8 @@ static PyMethodDef MARS_88_methods[] = {
 	 MARS_88_stop__doc__},
 	{"dumpcore", (PyCFunction)MARS_88_dumpcore, METH_VARARGS | METH_KEYWORDS,
 	 MARS_88_dumpcore__doc__},
+	{"dumpproc", (PyCFunction)MARS_88_dumpproc, METH_VARARGS | METH_KEYWORDS,
+	 MARS_88_dumpproc__doc__},
 	{"p_run", (PyCFunction)MARS_88_p_run, METH_VARARGS | METH_KEYWORDS,
 	 MARS_88_p_run__doc__},
 	{"mw_run", (PyCFunction)MARS_88_mw_run, METH_VARARGS | METH_KEYWORDS,
